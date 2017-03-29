@@ -1,0 +1,37 @@
+.jumbotron{
+	border-radius: 10px 10px 10px 10px;
+	background-color: #1C1A59;
+	color: white;
+	text-align: center;
+}
+
+header {	
+	color: white;
+	background-color: #1C1A59;
+	border-radius: 7px 7px 0px 0px;
+	font-size: 18px;
+}
+
+section {
+	margin-top: 30px;
+	border: 2px solid #1C1A59; 
+	border-radius: 10px 10px 10px 10px;
+}
+button{
+	background-color: #3399cc;
+}
+
+button:hover {
+	background-color: #add8e6;
+}
+
+#employee-table{
+	margin-top: 10px;
+}
+#name-text{
+	margin-top: 10px;
+}
+#search-button{
+	margin-bottom: 20px;
+}
+
