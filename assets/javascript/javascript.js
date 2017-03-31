@@ -15,25 +15,26 @@ $(document).ready(function () {
 	// When ever employee hits submit button
 	//(s - e /f)
 	// initialize variables 
-	var name = ""; 
-	var destination; 
-	var frequency; 
-	var initialTime;
+	var name =""; 
+	var destination=""; 
+	var frequency=0; 
+	var initialTime=0;
 
-	var minutesAway;
-	var nextDeparture;
 
 // When ever employee hits submit button
 	$("#search-button").on("click", function(event){
-	
+			
 	// get employee input values
 	name = $("#train-name").val().trim();
 	destination = $("#train-destination").val().trim();
-	initialTime = $("#train-time").val().trim();
-	frequency =  parseInt($("#train-frequency").val().trim());
+	initialTime = moment($("#train-time").val().trim(), "HH:mm").subtract(10, "years").format("X");
+	frequency =  $("#train-frequency").val().trim();
 
-	// console.log user values 
-	console.log(name + " " + destination + " " + initialTime);
+	//empty the form
+		$("#train-name").val("");
+		$("#train-destination").val("");
+		$("#train-time").val("");
+		$("#train-frequency").val("");
 
 	// adding user input to database
 	database.ref().push({
@@ -47,7 +48,7 @@ $(document).ready(function () {
 	
 }); //end search button
 
-     moment().toNow(Boolean);
+     // moment().toNow(Boolean);
 
 
 	//first start time HH:MM(convert to minutes) 
@@ -63,20 +64,33 @@ $(document).ready(function () {
 	// var totalBilled = minutesAway * snapshot.val().monthRate;
 
 database.ref().on("child_added", function(snapshot){
-	$("#train-name").html(snapshot.val().name);
-	$("#train-destination").html(snapshot.val().destination);
-	$("#train-time").html(snapshot.val().initialTime);
-	$("#train-frequency").html(snapshot.val().frequency);
+	// $("#train-name").html(snapshot.val().name);
+	// $("#train-destination").html(snapshot.val().destination);
+//local variables
+	var name = snapshot.val().name;
+	var destination=snapshot.val().destination;
+	var initialTime=snapshot.val().initialTime; 
+	var frequency = snapshot.val().frequency;
 
-	// calcMinutes(snapshot.val().initialTime
+
+	
+	var differenceTime = moment().diff(moment.unix(initialTime), "minutes");
+	var remainder = differenceTime%frequency;
+	var tminutes = frequency - remainder;
+	var arrival = moment().add(tminutes,"m").format("hh:mm A");
+
+	
+	console.log(differenceTime);
+
+	
 	 //adding user input to the table
     var tRow = $("<tr>");
 		tRow.append("<td>"+ snapshot.val().name+ "</td>");
 		tRow.append("<td>"+ snapshot.val().destination + "</td>");
-		tRow.append("<td>"+ snapshot.val().initialTime + "</td>");
-		tRow.append("<td>"+ snapshot.val().frequency +"</td>");
-		// tRow.append("<td>"+ snapshot.val().monthRate + "</td>");
-		// tRow.append("<td>"+ snapshot.val().totalBilled +"</td>");
+		tRow.append("<td>"+ snapshot.val().frequency + "</td>");
+		tRow.append("<td>"+ arrival +"</td>");
+		tRow.append("<td>"+ tminutes +"</td>");
+		
 		$("#train-table").append(tRow);
 	
 
@@ -85,19 +99,19 @@ database.ref().on("child_added", function(snapshot){
 		console.log("errors handled:" + errorObject.code);
 		
 });
-function calcMinutes(sd){
+// function calcMinutes(sd){
 
-// 	//take sd and format it in unix time THENNNNN do diff opp  THHEENNNN to months
-	 var unixStart = moment(sd).format('X');
+// // 	//take sd and format it in unix time THENNNNN do diff opp  THHEENNNN to months
+// 	 var unixStart = moment(sd).format('X');
 
-	 console.log(unixStart);
+// 	 console.log(unixStart);
 
 
-	var convertStart = moment(new Date(sd));
-	console.log(convertStart + "CONVERT START");
-	console.log(moment().diff(moment(convertStart), "minutes"));
-    minutesAway = moment().diff(moment(convertStart), "minutes");
-};
+// 	var convertStart = moment(new Date(sd));
+// 	console.log(convertStart + "CONVERT START");
+// 	console.log(moment().diff(moment(convertStart), "minutes"));
+//     minutesAway = moment().diff(moment(convertStart), "minutes");
+// };
 
 }); //end of document ready
 
