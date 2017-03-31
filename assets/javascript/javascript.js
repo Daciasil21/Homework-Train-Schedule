@@ -77,13 +77,15 @@ database.ref().on("child_added", function(snapshot){
 
 	 // Note that .subtract(10, years) will break the output for differenceTimes, 
 	 //because 10 years will be added to that output, which is in minutes.
-	var differenceTime = moment().diff(moment.unix(initialTime), "minutes");
-	var remainder = differenceTime%frequency;
-	var tminutes = frequency - remainder;
-	var arrival = moment().add(tminutes,"m").format("hh:mm A");
 
-	
-	console.log(differenceTime);
+	 //the difference in time between now (moment()) and the initial time of the train.
+	var timeDisparity= moment().diff(moment.unix(initialTime), "minutes");
+	//
+	var timeRemainder = timeDisparity % frequency;
+	//time when the train will arrive
+	var trainArrival = moment().add(minutesAway,"m").format("hh:mm A");
+	//number of minutes away
+	var minutesAway = frequency - timeRemainder;
 
 	
 	 //adding user input to the table
@@ -91,8 +93,8 @@ database.ref().on("child_added", function(snapshot){
 		tRow.append("<td>"+ snapshot.val().name+ "</td>");
 		tRow.append("<td>"+ snapshot.val().destination + "</td>");
 		tRow.append("<td>"+ snapshot.val().frequency + "</td>");
-		tRow.append("<td>"+ arrival +"</td>");
-		tRow.append("<td>"+ tminutes +"</td>");
+		tRow.append("<td>"+ trainArrival +"</td>");
+		tRow.append("<td>"+ minutesAway +"</td>");
 		
 		$("#train-table").append(tRow);
 	
@@ -102,19 +104,6 @@ database.ref().on("child_added", function(snapshot){
 		console.log("errors handled:" + errorObject.code);
 		
 });
-// function calcMinutes(sd){
-
-// // 	//take sd and format it in unix time THENNNNN do diff opp  THHEENNNN to months
-// 	 var unixStart = moment(sd).format('X');
-
-// 	 console.log(unixStart);
-
-
-// 	var convertStart = moment(new Date(sd));
-// 	console.log(convertStart + "CONVERT START");
-// 	console.log(moment().diff(moment(convertStart), "minutes"));
-//     minutesAway = moment().diff(moment(convertStart), "minutes");
-// };
 
 }); //end of document ready
 
@@ -122,8 +111,6 @@ database.ref().on("child_added", function(snapshot){
 
 
 
-// moment().format("DD/MM/YY hh:mm A")
-//database.ref().orderByChild("dateAdded")
 
 
 
