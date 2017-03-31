@@ -27,6 +27,8 @@ $(document).ready(function () {
 	// get employee input values
 	name = $("#train-name").val().trim();
 	destination = $("#train-destination").val().trim();
+	 // Note that .subtract(10, years) will break the output for differenceTimes,
+	 // because 10 years will be added to that output, which is in minutes.
 	initialTime = moment($("#train-time").val().trim(), "HH:mm").subtract(10, "years").format("X");
 	frequency =  $("#train-frequency").val().trim();
 
@@ -73,7 +75,8 @@ database.ref().on("child_added", function(snapshot){
 	var frequency = snapshot.val().frequency;
 
 
-	
+	 // Note that .subtract(10, years) will break the output for differenceTimes, 
+	 //because 10 years will be added to that output, which is in minutes.
 	var differenceTime = moment().diff(moment.unix(initialTime), "minutes");
 	var remainder = differenceTime%frequency;
 	var tminutes = frequency - remainder;
