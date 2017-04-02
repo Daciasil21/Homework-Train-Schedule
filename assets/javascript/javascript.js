@@ -82,10 +82,11 @@ database.ref().on("child_added", function(snapshot){
 	var timeDisparity= moment().diff(moment.unix(initialTime), "minutes");
 	//
 	var timeRemainder = timeDisparity % frequency;
+		//number of minutes away
+	var minutesAway = frequency - timeRemainder;
+
 	//time when the train will arrive
 	var trainArrival = moment().add(minutesAway,"m").format("hh:mm A");
-	//number of minutes away
-	var minutesAway = frequency - timeRemainder;
 
 	
 	 //adding user input to the table
